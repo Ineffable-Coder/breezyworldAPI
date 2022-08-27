@@ -4,7 +4,7 @@ const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken")
 
 //REGISTER
-router.post("register", async (req,res) => {
+router.post("/register", async (req,res) => {
   const newUser = new User({
         username: req.body.username,
         email: req.body.email,
@@ -14,14 +14,7 @@ router.post("register", async (req,res) => {
         ).toString(),
      });
 
-   /*   const accessToken = jwt.sign(
-        {
-          id: user._id,
-          isAdmin: user.isAdmin, 
-        }, process.env.JWT_SEC
-        {expiresIn:"3d"}
-        );
-*/
+
   try{
     const savedUser = await newUser.save();
     res.status(201).json(savedUse);
@@ -45,10 +38,19 @@ router.post("/login", async (req,res)=>{
 
         Originalpassword !==req.body.password && 
         res.status(401).json("Wrong Credentials!");
+          
+        const accessToken = jwt.sign(
+        {
+          id: user._id,
+          isAdmin: user.isAdmin, 
+        }, 
+        process.env.JWT_SEC,
+        {expiresIn:"3d"}
+        );
 
         const { password, ...others } = user._doc;
 
-        res.status(200).json(others);
+        res.status(200).json({...others, accessToken});
     } catch (err) {
         res.status(500).json(err)
     }
