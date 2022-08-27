@@ -1,4 +1,9 @@
 const router = require("express").Router();
 
 
-module.exports = router;
+router.post("userrposttest", (req,res)=>{
+    const username = req.body.username
+    console.log(username);
+});
+
+module.exports = router
