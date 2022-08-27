@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/User");
-const CryptoJS = require("crypto-js")
+const CryptoJS = require("crypto-js");
+const jwt = require("jsonwebtoken")
 
 //REGISTER
 router.post("register", async (req,res)=>{
@@ -10,9 +11,17 @@ router.post("register", async (req,res)=>{
         password: req.body.password,
   });
 
+   /*   const accessToken = jwt.sign(
+        {
+          id: user._id,
+          isAdmin: user.isAdmin, 
+        }, process.env.JWT_SEC
+        {expiresIn:"3d"}
+        );
+*/
   try{
     const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
+    res.status(201).json(savedUse);
   } catch (err) {
     res.status(500).json(err);
   }
